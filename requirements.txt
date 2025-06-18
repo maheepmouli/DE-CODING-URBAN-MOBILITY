@@ -1,0 +1,8 @@
+streamlit
+pandas
+matplotlib
+seaborn
+google-generativeai
+geopandas
+keplergl
+plotly
