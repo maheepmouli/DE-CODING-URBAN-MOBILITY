@@ -4,5 +4,6 @@ matplotlib
 seaborn
 google-generativeai
 geopandas
-keplergl
+keplergl==0.2.2  # Downgrade keplergl
+pyarrow==10.0.1  # Downgrade pyarrow to a known stable version that usually has wheels
 plotly
