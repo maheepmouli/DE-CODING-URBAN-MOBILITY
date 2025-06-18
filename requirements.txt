@@ -1,10 +1,17 @@
+# Core dashboard and visualization libraries
 streamlit
 pandas
 matplotlib
 seaborn
+plotly
+
+# AI integration
 google-generativeai
+
+# Geospatial tools
 geopandas
-keplergl==0.2.2  # Downgrade keplergl
+keplergl==0.2.2  # Compatible version of keplergl
+
+# Compatibility fixes for Python 3.13+
 numpy>=1.26.4
 pyarrow>=14.0.0
-plotly
