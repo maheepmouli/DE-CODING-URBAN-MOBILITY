@@ -4,6 +4,6 @@ matplotlib
 seaborn
 google-generativeai
 geopandas
-folium
+keplergl==0.2.2  # Downgrade keplergl
 pyarrow==6.0.1
 plotly
