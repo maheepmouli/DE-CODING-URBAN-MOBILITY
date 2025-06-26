@@ -51,10 +51,24 @@ DARK_MODE_CSS = f"""
     /* Custom Header Container for Title and Logo */
     .header-container {{
         display: flex;
-        justify-content: space-between;
-        align-items: center;
+        flex-direction: column; /* Stack logo and title vertically */
+        align-items: center;    /* Center horizontally */
         margin-bottom: 20px;
         padding-right: 15px;
+        text-align: center; /* Ensure text is centered too */
+    }}
+
+    .header-logo {{
+        height: 250px; /* Adjusted height for dark mode logo */
+        width: auto;
+        border-radius: 8px;
+        object-fit: contain;
+        margin-bottom: 10px; /* Space between logo and title */
+    }}
+    @media (max-width: 768px) {{
+        .header-logo {{
+            height: 150px; /* Smaller logo on mobile */
+        }}
     }}
 
     .gradient-title {{
@@ -67,12 +81,10 @@ DARK_MODE_CSS = f"""
         margin: 0;
         line-height: 1.2;
     }}
-
-    .header-logo {{
-        height: 250px; /* Adjusted height for dark mode logo */
-        width: auto;
-        border-radius: 8px;
-        object-fit: contain;
+    @media (max-width: 768px) {{
+        .gradient-title {{
+            font-size: 2em; /* Smaller font size on mobile */
+        }}
     }}
 
     /* Title styling for other sections (h2, h3) */
@@ -107,7 +119,7 @@ DARK_MODE_CSS = f"""
 
     [data-testid="stSidebar"] h2, [data-testid="stSidebar"] h3 {{
         color: #7C4DFF !important; /* More dim purple for sidebar headers */
-        font-weight: 700 !important; /* Make sidebar headers thicker */
+        font-weight: 700 !important;
     }}
 
     /* Sidebar input/textarea styling */
@@ -176,13 +188,19 @@ DARK_MODE_CSS = f"""
         border: 0.8px solid #555555;
         background-color: rgba(0, 212, 255, 0.05); /* Light blue tint */
         border-radius: 15px;
-        padding: 5px 10px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        padding: 5px 10px; /* Add padding for better appearance */
     }}
 
     /* ======================================================================
        4) Main Content & Data Display
     ====================================================================== */
+    /* Adjust main content area to fit page layout better */
+    [data-testid="stAppViewBlockContainer"] {{
+        max-width: 1200px; /* Limit maximum width */
+        margin: auto; /* Center the content */
+    }}
+
     hr.main-separator {{
       border: none; /* Remove default border */
       height: 3px; /* Make it a bit thicker */
@@ -249,7 +267,6 @@ DARK_MODE_CSS = f"""
         font-weight: 600;
     }}
 
-
     /* Expander styling */
     .st-expander, .st-emotion-cache-0 {{
         border: 0.8px solid #444444 !important;
@@ -314,7 +331,6 @@ DARK_MODE_CSS = f"""
         margin-bottom: 5px;
         color: #CCCCCC; /* Slightly subdued text for readability */
     }}
-
     </style>
 """
 
@@ -332,6 +348,28 @@ LIGHT_MODE_CSS = f"""
         color: #333333 !important; /* Dark text */
     }}
 
+    .header-container {{
+        display: flex;
+        flex-direction: column; /* Stack logo and title vertically */
+        align-items: center;    /* Center horizontally */
+        margin-bottom: 20px;
+        padding-right: 15px;
+        text-align: center; /* Ensure text is centered too */
+    }}
+
+    .header-logo {{
+        height: 150px; /* Kept height for light mode logo */
+        width: auto;
+        border-radius: 8px;
+        object-fit: contain;
+        margin-bottom: 10px; /* Space between logo and title */
+    }}
+    @media (max-width: 768px) {{
+        .header-logo {{
+            height: 150px; /* Smaller logo on mobile */
+        }}
+    }}
+
     .gradient-title {{
         background: linear-gradient(to right, #4CAF50, #2196F3); /* Green to Blue gradient */
         -webkit-background-clip: text;
@@ -342,12 +380,10 @@ LIGHT_MODE_CSS = f"""
         margin: 0;
         line-height: 1.2;
     }}
-
-    .header-logo {{
-        height: 150px; /* Kept height for light mode logo */
-        width: auto;
-        border-radius: 8px;
-        object-fit: contain;
+    @media (max-width: 768px) {{
+        .gradient-title {{
+            font-size: 2em; /* Smaller font size on mobile */
+        }}
     }}
 
     h2, h3 {{
@@ -426,14 +462,21 @@ LIGHT_MODE_CSS = f"""
         border: 0.8px solid #CCCCCC;
         background-color: rgba(33, 150, 243, 0.05);
         border-radius: 15px;
-        padding: 5px 10px;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+        padding: 5px 10px; /* Add padding for better appearance */
+    }}
+
+    /* Adjust main content area to fit page layout better */
+    [data-testid="stAppViewBlockContainer"] {{
+        max-width: 1200px; /* Limit maximum width */
+        margin: auto; /* Center the content */
     }}
 
     hr.main-separator {{
       background: linear-gradient(to right, #4CAF50, #2196F3);
     }}
     
+    /* Custom styling for dataframes */
     .stDataFrame {{
         border: 0.8px solid #CCCCCC !important;
         background-color: rgba(255, 152, 0, 0.03); /* Light orange tint */
@@ -509,9 +552,10 @@ LIGHT_MODE_CSS = f"""
     .st-emotion-cache-1wivapv {{
         border-color: #F44336;
         background-color: rgba(244, 67, 54, 0.1);
-        color: #333333 !important;
+        color: #F5F5F5 !important;
     }}
 
+    /* Card styling for City Traffic Snapshots */
     .city-card {{
         background: linear-gradient(135deg, rgba(76, 175, 80, 0.03), rgba(33, 150, 243, 0.03));
         border: 1.5px solid #CCCCCC;
@@ -542,22 +586,34 @@ LIGHT_MODE_CSS = f"""
 
 # Theme Toggle in Sidebar
 st.sidebar.subheader("App Theme")
-use_light_mode = st.sidebar.checkbox("Enable Light Mode", value=False)
 
-if use_light_mode:
-    st.markdown(LIGHT_MODE_CSS, unsafe_allow_html=True)
-    plotly_template = "plotly_white" # Use light template for Plotly
+# Initialize theme in session state if not present
+if 'theme' not in st.session_state:
+    st.session_state.theme = 'Dark'
+
+# Toggle for light/dark mode
+if st.sidebar.toggle("Enable Light Mode", value=(st.session_state.theme == 'Light')):
+    st.session_state.theme = 'Light'
 else:
+    st.session_state.theme = 'Dark'
+
+# Apply CSS based on the selected theme
+if st.session_state.theme == 'Dark':
     st.markdown(DARK_MODE_CSS, unsafe_allow_html=True)
     plotly_template = "plotly_dark" # Use dark template for Plotly
+    plotly_font_color = "white"
+else:
+    st.markdown(LIGHT_MODE_CSS, unsafe_allow_html=True)
+    plotly_template = "plotly_white" # Use light template for Plotly
+    plotly_font_color = "black"
 
 
 # --- Custom App Title with Logo ---
 st.markdown(
     f"""
     <div class="header-container">
-        <h1 class="gradient-title">FlowSIGHT - Congestion Analytic Assistant</h1>
         <img src="data:image/jpeg;base64,{logo_base64}" class="header-logo" alt="FlowSIGHT Logo" onerror="this.onerror=null;this.src='https://placehold.co/80x80/FFFFFF/333333?text=Logo';">
+        <h1 class="gradient-title">FlowSIGHT - Congestion Analytic Assistant</h1>
     </div>
     """,
     unsafe_allow_html=True
@@ -718,6 +774,15 @@ with st.sidebar.container(border=True):
 # Insert another separator before the “Ask me anything” section
 st.sidebar.markdown('<hr style="border-top:0.8px solid #444444;" />', unsafe_allow_html=True)
 
+# ----------------- NEW "Select Cities" filter -----------------
+all_cities = df_original['CITY'].unique().tolist()
+selected_cities = st.sidebar.multiselect(
+    "Select Cities",
+    options=all_cities,
+    default=all_cities
+)
+df = df[df['CITY'].isin(selected_cities)]
+
 st.sidebar.subheader("Ask me anything")
 # Add a prompt guide with reduced font size
 st.sidebar.markdown(
@@ -729,9 +794,11 @@ st.sidebar.markdown(
     <p>&bull; "Compare speed in BARCELONA and NEW YORK CITY"</p>
     <p>&bull; "Rank cities by public transport trips"</p>
     <p>&bull; "Show distribution of speed by management type"</p>
+    <p>&bull; "Show distribution of congestion by road type"</p>
     <p>&bull; "What is the strongest factor affecting congestion?"</p>
     <p>&bull; "Show correlation heatmap"</p>
     <p>&bull; "Is congestion affected by holidays?"</p>
+    <p>&bull; "Compare congestion by AI vs conventional methods"</p>
     </div>
     """,
     unsafe_allow_html=True
@@ -798,7 +865,8 @@ if st.sidebar.checkbox("Show City Snapshots (based on filtered data)"):
             }).reset_index()
 
             # Display snapshots as cards using st.columns for a grid layout
-            cols = st.columns(3) # Create 3 columns for card layout
+            # Use responsive columns for better mobile/desktop adaptation
+            cols = st.columns([1, 1, 1]) # Adjust ratios for responsiveness if needed
             for i, (_, row) in enumerate(city_summary.iterrows()):
                 with cols[i % 3]: # Cycle through columns (0, 1, 2, 0, 1, 2...)
                     st.markdown(f"""
@@ -818,7 +886,7 @@ if st.sidebar.checkbox("Show City Snapshots (based on filtered data)"):
 # =============================================================================
 #                             CORE FUNCTION
 # =============================================================================
-def plot_and_answer(query, data_frame, plot_template):
+def plot_and_answer(query, data_frame, plot_template, font_color):
     """
     Analyzes the user query and generates appropriate Plotly visualizations
     and textual responses based on the filtered data.
@@ -828,10 +896,12 @@ def plot_and_answer(query, data_frame, plot_template):
     plot_generated = False # Flag to track if a Plotly figure was generated
     fig = None # Kept for compatibility in case a Matplotlib plot is ever re-introduced
     default_plot_height = 800 # Define a default height for plots
-    font_color = "white" if plot_template == "plotly_dark" else "black" # Set font color based on theme
+
+    print(f"DEBUG: Processing query: '{query_lower}'")
 
     # 1. Trend over time (Plotly Line Chart)
     if "trend" in query_lower or "over time" in query_lower:
+        print("DEBUG: Triggered: Trend over time analysis.")
         metric_keywords = {
             "congestion": "congestion_index", "aqi": "AQI_mean", "speed": "SPEED",
             "temperature": "tavg", "precipitation": "prcp", "wind speed": "wspd",
@@ -855,6 +925,7 @@ def plot_and_answer(query, data_frame, plot_template):
                 city_specified = True
                 city_data = data_frame[data_frame['CITY'].str.lower() == city.lower()].copy()
                 if city_data.empty:
+                    print(f"DEBUG: No data for {city} with current filters for trend.")
                     return f"No data for {city} with current filters to plot trend for {selected_metric_col}.", None
                 if 'date' not in city_data.columns or not pd.api.types.is_datetime64_any_dtype(city_data['date']):
                     st.warning(f"Date column not found or not in datetime format for {city}. Cannot plot trend.")
@@ -867,7 +938,10 @@ def plot_and_answer(query, data_frame, plot_template):
                                  template=plot_template,
                                  color_discrete_sequence=["#00D4FF"], # Vibrant blue
                                  height=default_plot_height)
-                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color) # Set legend font color
                 st.plotly_chart(px_fig, use_container_width=True)
                 plot_generated = True
                 return f"Interactive trend of {selected_metric_col.replace('_', ' ')} in {city}.", None
@@ -887,13 +961,17 @@ def plot_and_answer(query, data_frame, plot_template):
                              template=plot_template,
                              color_discrete_sequence=["#7C4DFF"], # More dim purple accent
                              height=default_plot_height)
-            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+            px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_layout(legend_font_color=font_color) # Set legend font color
             st.plotly_chart(px_fig, use_container_width=True)
             plot_generated = True
             return f"Interactive overall trend of {selected_metric_col.replace('_', ' ')} across all cities.", None
 
     # 2. Scatter Plots (Plotly)
     elif "scatter" in query_lower or "relationship" in query_lower or ("vs" in query_lower and any(col in query_lower for col in ['congestion', 'temperature', 'precipitation', 'wind', 'population', 'aqi', 'public transport', 'speed', 'volume'])):
+        print("DEBUG: Triggered: Scatter plot analysis.")
         all_numeric_cols = data_frame.select_dtypes(include='number').columns.tolist()
         col_map = {
             "congestion": "congestion_index", "aqi": "AQI_mean", "speed": "SPEED",
@@ -927,19 +1005,25 @@ def plot_and_answer(query, data_frame, plot_template):
 
             plot_data = data_frame.dropna(subset=[potential_x, potential_y])
             if plot_data.empty:
+                print(f"DEBUG: Plot data is empty for scatter of {potential_x} vs {potential_y}.")
                 return f"No valid data points for a scatter plot of '{potential_x.replace('_', ' ')}' vs '{potential_y.replace('_', ' ')}' after filtering NaN values.", None
 
             city_specified_in_query = False
             selected_city_for_plot = None
-            for city_name in data_frame['CITY'].unique():
-                if city_name.lower() in query_lower:
+            # Robust city extraction for scatter plots
+            unique_df_cities = data_frame['CITY'].unique().tolist()
+            sorted_cities = sorted(unique_df_cities, key=len, reverse=True) # Sort to match longer names first
+
+            for df_city in sorted_cities:
+                if re.search(r'\b' + re.escape(df_city.lower()) + r'\b', query_lower):
+                    selected_city_for_plot = df_city
                     city_specified_in_query = True
-                    selected_city_for_plot = city_name
-                    break
+                    break # Stop after finding the first city
 
             if city_specified_in_query:
                 city_data = plot_data[plot_data['CITY'].str.lower() == selected_city_for_plot.lower()]
                 if city_data.empty:
+                    print(f"DEBUG: No data for {selected_city_for_plot} for scatter plot.")
                     return f"No data for {selected_city_for_plot} with current filters to plot {potential_x.replace('_', ' ')} vs {potential_y.replace('_', ' ')}.", None
 
                 px_fig = px.scatter(city_data, x=potential_x, y=potential_y, 
@@ -948,7 +1032,10 @@ def plot_and_answer(query, data_frame, plot_template):
                                     template=plot_template,
                                     color_discrete_sequence=["#FFA726"], # Vibrant orange accent
                                     height=default_plot_height)
-                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color) # Set legend font color
                 st.plotly_chart(px_fig, use_container_width=True)
                 plot_generated = True
                 return f"Interactive scatter plot showing {potential_y.replace('_', ' ')} vs. {potential_x.replace('_', ' ')} in {selected_city_for_plot}.", None
@@ -961,15 +1048,162 @@ def plot_and_answer(query, data_frame, plot_template):
                                     color_discrete_sequence=px.colors.qualitative.Plotly, # Use a good default palette
                                     height=default_plot_height
                                     )
-                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color) # Set legend font color
                 st.plotly_chart(px_fig, use_container_width=True)
                 plot_generated = True
                 return f"Interactive scatter plot showing {potential_y.replace('_', ' ')} vs. {potential_x.replace('_', ' ')} across all filtered cities.", None
         else:
             return "Could not determine appropriate columns for scatter plot. Please be more specific.", None
 
+    # Specific AI Assistant Plotting Logic: Correlation AQI and Congestion in specific city
+    elif "correlation between aqi and congestion in" in query_lower:
+        print("DEBUG: Triggered: Correlation AQI and Congestion in specific city analysis.")
+        city_match = re.search(r"in (\w+)", query_lower)
+        if city_match:
+            city_name_from_query = city_match.group(1).upper()
+            if 'AQI_mean' in data_frame.columns and 'congestion_index' in data_frame.columns:
+                city_data = data_frame[data_frame['CITY'] == city_name_from_query]
+                if not city_data.empty:
+                    plot_data = city_data.dropna(subset=['AQI_mean', 'congestion_index'])
+                    if not plot_data.empty and plot_data['AQI_mean'].nunique() > 1 and plot_data['congestion_index'].nunique() > 1:
+                        correlation = plot_data['AQI_mean'].corr(plot_data['congestion_index'])
+                        
+                        px_fig = px.scatter(plot_data, x='AQI_mean', y='congestion_index',
+                                            title=f"AQI vs Congestion Index in {city_name_from_query}",
+                                            labels={'AQI_mean': 'Mean AQI', 'congestion_index': 'Congestion Index'},
+                                            template=plot_template,
+                                            color_discrete_sequence=["#FFA726"],
+                                            height=default_plot_height)
+                        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color)
+                        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                        px_fig.update_layout(legend_font_color=font_color)
+                        st.plotly_chart(px_fig, use_container_width=True)
+                        plot_generated = True
+                        return f"The correlation between AQI and congestion in {city_name_from_query} is **{correlation:.2f}**.", None
+                    else:
+                        print(f"DEBUG: Not enough valid data points for AQI and congestion in {city_name_from_query} to plot correlation.")
+                        return f"Not enough valid data points for AQI and congestion in {city_name_from_query} to plot correlation.", None
+                else:
+                    print(f"DEBUG: No data found for {city_name_from_query} to plot correlation.")
+                    return f"No data found for {city_name_from_query} to plot correlation.", None
+            else:
+                print("DEBUG: AQI_mean or congestion_index columns are missing for correlation analysis.")
+                return "AQI_mean or congestion_index columns are missing in the dataset.", None
+        else:
+            return "Please specify a city for AQI and congestion correlation analysis (e.g., 'What is the correlation between AQI and congestion in PARIS?').", None
+
+    # Specific AI Assistant Plotting Logic: Compare speed in CITY1 and CITY2
+    elif "compare speed in" in query_lower and "and" in query_lower:
+        print("DEBUG: Triggered: Compare speed in CITY1 and CITY2 analysis.")
+        
+        unique_df_cities = data_frame['CITY'].unique().tolist()
+        cities_to_compare_extracted = []
+        sorted_cities = sorted(unique_df_cities, key=len, reverse=True) # Sort to match longer names first
+
+        for df_city in sorted_cities:
+            # Use word boundaries \b to ensure whole word match
+            if re.search(r'\b' + re.escape(df_city.lower()) + r'\b', query_lower):
+                if df_city not in cities_to_compare_extracted:
+                    cities_to_compare_extracted.append(df_city)
+        
+        cities_to_compare = cities_to_compare_extracted[:2] # Take the first two found
+        print(f"DEBUG: Cities extracted for speed comparison: {cities_to_compare}")
+
+        if len(cities_to_compare) >= 2: # Check for at least two cities
+            subset = data_frame[data_frame["CITY"].isin(cities_to_compare)]
+            if not subset.empty and 'SPEED' in subset.columns:
+                avg_speed_df = subset.groupby("CITY")["SPEED"].mean().reset_index()
+                avg_speed_df = avg_speed_df[avg_speed_df['CITY'].isin(cities_to_compare)] # Ensure only queried cities are in plot
+                
+                if len(avg_speed_df) >= 2: # Ensure we have data for at least two cities
+                    px_fig = px.bar(avg_speed_df, x='CITY', y='SPEED',
+                                    title=f"Average Speed: {cities_to_compare[0]} vs {cities_to_compare[1]}",
+                                    labels={'CITY': 'City', 'SPEED': 'Average Speed'},
+                                    template=plot_template,
+                                    color='CITY',
+                                    color_discrete_map={cities_to_compare[0]: "#00D4FF", cities_to_compare[1]: "#7C4DFF"},
+                                    height=default_plot_height)
+                    px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color)
+                    px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                    px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                    px_fig.update_layout(legend_font_color=font_color)
+                    st.plotly_chart(px_fig, use_container_width=True)
+                    plot_generated = True
+                    return f"Interactive bar chart comparing average speed in {cities_to_compare[0]} and {cities_to_compare[1]}.", None
+                else:
+                    print(f"DEBUG: Not enough speed data for both {cities_to_compare[0]} and {cities_to_compare[1]} for comparison.")
+                    return f"Not enough speed data for both {cities_to_compare[0]} and {cities_to_compare[1]} with current filters.", None
+            else:
+                print("DEBUG: Speed column missing or no data for specified cities for comparison.")
+                return "Speed column missing or no data for specified cities with current filters.", None
+        else:
+            print(f"DEBUG: Did not find two cities for comparison. Found: {cities_to_compare}")
+            return "Please specify at least two cities to compare speed (e.g., 'Compare speed in BARCELONA and NEW YORK CITY').", None
+
+    # Specific AI Assistant Plotting Logic: Show distribution of speed by management type
+    elif "distribution of speed by management type" in query_lower:
+        print("DEBUG: Triggered: Distribution of speed by management type analysis.")
+        if 'MANAGEMENT_TYPE' in data_frame.columns and 'SPEED' in data_frame.columns:
+            plot_data = data_frame.dropna(subset=['MANAGEMENT_TYPE', 'SPEED'])
+            print(f"DEBUG: Speed by management type - plot_data shape: {plot_data.shape}, unique MANAGEMENT_TYPE: {plot_data['MANAGEMENT_TYPE'].unique()}")
+            if not plot_data.empty and plot_data['MANAGEMENT_TYPE'].nunique() > 1:
+                px_fig = px.box(plot_data, x="MANAGEMENT_TYPE", y="SPEED", 
+                                title="Distribution of Speed by Management Type",
+                                labels={"MANAGEMENT_TYPE": "Management Type", "SPEED": "Speed"},
+                                template=plot_template,
+                                color="MANAGEMENT_TYPE",
+                                color_discrete_sequence=px.colors.qualitative.D3,
+                                height=default_plot_height)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color)
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color)
+                st.plotly_chart(px_fig, use_container_width=True)
+                plot_generated = True
+                return "Interactive box plot showing the distribution of speed across different traffic management types.", None
+            else:
+                print("DEBUG: Not enough valid data or unique management types for speed distribution.")
+                return "Not enough valid data or unique management types to plot speed distribution by management type.", None
+        else:
+            print("DEBUG: MANAGEMENT_TYPE or SPEED columns are missing for speed distribution.")
+            return "MANAGEMENT_TYPE or SPEED columns are missing in the dataset.", None
+
+    # Specific AI Assistant Plotting Logic: Show distribution of congestion by road type
+    elif "distribution of congestion by road type" in query_lower:
+        print("DEBUG: Triggered: Distribution of congestion by road type analysis.")
+        if 'road_type' in data_frame.columns and 'congestion_index' in data_frame.columns:
+            plot_data = data_frame.dropna(subset=['road_type', 'congestion_index'])
+            print(f"DEBUG: Congestion by road type - plot_data shape: {plot_data.shape}, unique road_type: {plot_data['road_type'].unique()}")
+            if not plot_data.empty and plot_data['road_type'].nunique() > 1:
+                px_fig = px.box(plot_data, x="road_type", y="congestion_index", 
+                                title="Distribution of Congestion by Road Type",
+                                labels={"road_type": "Road Type", "congestion_index": "Congestion Index"},
+                                template=plot_template,
+                                color="road_type",
+                                color_discrete_sequence=px.colors.qualitative.Set2,
+                                height=default_plot_height)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color)
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color)
+                st.plotly_chart(px_fig, use_container_width=True)
+                plot_generated = True
+                return "Interactive box plot showing the distribution of congestion across different road types.", None
+            else:
+                print("DEBUG: Not enough valid data or unique road types for congestion distribution.")
+                return "Not enough valid data or unique road types to plot congestion distribution by road type.", None
+        else:
+            print("DEBUG: road_type or congestion_index columns are missing for congestion distribution.")
+            return "road_type or congestion_index columns are missing in the dataset.", None
+
+
     # 3. Boxplot (by categorical) (Plotly)
     elif ("boxplot" in query_lower or "distribution" in query_lower) and "by" in query_lower:
+        print("DEBUG: Triggered: General boxplot by categorical analysis.")
         parts = query_lower.split(" by ")
         if len(parts) == 2:
             value_col_raw = parts[0].replace("show", "").replace("distribution", "").strip()
@@ -978,7 +1212,7 @@ def plot_and_answer(query, data_frame, plot_template):
             col_map = {
                 "speed": "SPEED", "congestion": "congestion_index", "aqi": "AQI_mean",
                 "temperature": "tavg", "precipitation": "prcp", "management": "MANAGEMENT_TYPE",
-                "management type": "MANAGEMENT_TYPE", "city": "CITY"
+                "management type": "MANAGEMENT_TYPE", "city": "CITY", "road": "road_type", "road type": "road_type"
             }
             value_col = col_map.get(value_col_raw, None)
             category_col = col_map.get(category_col_raw, None)
@@ -988,7 +1222,9 @@ def plot_and_answer(query, data_frame, plot_template):
                     return f"One or both of the specified columns ('{value_col}', '{category_col}') are not available for boxplot.", None
 
                 plot_data = data_frame.dropna(subset=[value_col, category_col])
+                print(f"DEBUG: General boxplot - plot_data shape: {plot_data.shape}, unique {category_col}: {plot_data[category_col].unique()}")
                 if plot_data.empty or plot_data[category_col].nunique() < 2:
+                    print(f"DEBUG: Not enough valid data or unique categories in '{category_col}' for boxplot.")
                     return f"Not enough valid data or unique categories in '{category_col}' to create a boxplot for '{value_col}'.", None
 
                 px_fig = px.box(plot_data, x=category_col, y=value_col, 
@@ -999,15 +1235,20 @@ def plot_and_answer(query, data_frame, plot_template):
                                 color_discrete_sequence=px.colors.qualitative.D3, # Good qualitative palette
                                 height=default_plot_height
                                 )
-                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+                px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+                px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+                px_fig.update_layout(legend_font_color=font_color) # Set legend font color
                 st.plotly_chart(px_fig, use_container_width=True)
                 plot_generated = True
                 return f"Interactive boxplot of {value_col.replace('_', ' ')} distribution by {category_col.replace('_', ' ')}.", None
             else:
+                print("DEBUG: Could not determine columns for general boxplot.")
                 return "Could not determine columns for boxplot. Please specify a numeric column and a categorical column, e.g., 'speed by management type'.", None
 
     # 4. Ranking (Plotly Bar Chart with Dynamic Height)
     elif "rank" in query_lower:
+        print("DEBUG: Triggered: Ranking analysis.")
         metric_keywords = {
             "congestion": "congestion_index", "aqi": "AQI_mean", "speed": "SPEED",
             "temperature": "tavg", "precipitation": "prcp", "wind speed": "wspd",
@@ -1035,6 +1276,7 @@ def plot_and_answer(query, data_frame, plot_template):
         avg_metric = data_frame.groupby("CITY")[selected_metric_col].mean().sort_values(ascending=ascending_rank).reset_index()
 
         if avg_metric.empty:
+            print(f"DEBUG: Not enough data to rank cities by {selected_metric_col}.")
             return f"Not enough data to rank cities by {selected_metric_col.replace('_', ' ')} with current filters.", None
 
         # DYNAMIC SIZING: Calculate height based on number of cities (2x original)
@@ -1052,27 +1294,27 @@ def plot_and_answer(query, data_frame, plot_template):
                         height=plot_height # Set dynamic height
                         )
         px_fig.update_layout(yaxis={'categoryorder':'total ascending' if ascending_rank else 'total descending'})
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return f"Interactive ranking of cities by average {selected_metric_col.replace('_', ' ')}. {rank_order.capitalize()} values are {'better' if ascending_rank else 'worse'}.", None
 
     # 5. Impact by factor (Plotly Bar Chart)
     elif "most affected by" in query_lower or "impact of" in query_lower:
+        print("DEBUG: Triggered: Impact by factor analysis.")
         feature_map = {
             "precipitation": "prcp", "aqi": "AQI_mean", "wind": "wspd",
             "temperature": "tavg", "population density": "POPULATION DENSITY",
             "public transport trips": "TOTAL PUBLIC TRANSPORT TRIP"
         }
         target_col = "congestion_index"
-        if "on" in query_lower:
-            parts = query_lower.split(" on ")
-            if len(parts) == 2:
-                target_keyword = parts[1].strip()
-                if "speed" in target_keyword:
-                    target_col = "SPEED"
-                elif "traffic volume" in target_keyword:
-                    target_col = "TRAFFIC_VOLUME"
+        if "on speed" in query_lower:
+            target_col = "SPEED"
+        elif "on traffic volume" in query_lower:
+            target_col = "TRAFFIC_VOLUME"
 
         selected_factor_col = None
         for keyword, col_name in feature_map.items():
@@ -1098,7 +1340,8 @@ def plot_and_answer(query, data_frame, plot_template):
                     cities_for_corr.append(city_name) # Ensure city is added to list
 
         if not corrs:
-             return f"Could not calculate correlations for {selected_factor_col} impact on {target_col} with current filters; insufficient data or too many missing values.", None
+            print(f"DEBUG: Could not calculate correlations for {selected_factor_col} impact on {target_col}.")
+            return f"Could not calculate correlations for {selected_factor_col} impact on {target_col} with current filters; insufficient data or too many missing values.", None
 
         corr_df = pd.DataFrame(corrs).sort_values(by="Absolute Correlation", ascending=False)
         
@@ -1109,22 +1352,32 @@ def plot_and_answer(query, data_frame, plot_template):
                         color="Absolute Correlation", color_continuous_scale=px.colors.sequential.Plasma, # New palette for dark theme
                         height=default_plot_height
                         )
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return f"Interactive rank of cities by absolute correlation between {selected_factor_col.replace('_', ' ')} and {target_col.replace('_', ' ')}.", None
 
     # 6. Compare two cities (Plotly Bar Chart)
     elif "compare" in query_lower and "and" in query_lower:
-        cities_in_query = []
-        query_words = query_lower.replace(',', ' ').replace(' and ', ' ').split()
-        unique_df_cities_lower = {c.lower(): c for c in data_frame["CITY"].unique()}
+        print("DEBUG: Triggered: Compare two cities analysis (general).")
+        
+        unique_df_cities = data_frame['CITY'].unique().tolist()
+        cities_to_compare_extracted = []
+        sorted_cities = sorted(unique_df_cities, key=len, reverse=True) # Sort to match longer names first
 
-        for word in query_words:
-            if word.lower() in unique_df_cities_lower:
-                cities_in_query.append(unique_df_cities_lower[word.lower()])
+        for df_city in sorted_cities:
+            # Use word boundaries \b to ensure whole word match
+            if re.search(r'\b' + re.escape(df_city.lower()) + r'\b', query_lower):
+                if df_city not in cities_to_compare_extracted:
+                    cities_to_compare_extracted.append(df_city)
+        
+        cities_to_compare = cities_to_compare_extracted[:2] # Take the first two found
+        print(f"DEBUG: Cities extracted for general comparison: {cities_to_compare}")
 
-        if len(cities_in_query) == 2:
+        if len(cities_to_compare) == 2:
             metric_keywords = {
                 "congestion": "congestion_index", "aqi": "AQI_mean", "speed": "SPEED",
                 "temperature": "tavg", "precipitation": "prcp", "wind speed": "wspd",
@@ -1140,15 +1393,16 @@ def plot_and_answer(query, data_frame, plot_template):
             if selected_metric_col not in data_frame.columns:
                 return f"The '{selected_metric_col}' column is not available for comparison.", None
 
-            cities_to_compare = cities_in_query
             subset = data_frame[data_frame["CITY"].isin(cities_to_compare)]
             if subset.empty:
+                print(f"DEBUG: No data for {cities_to_compare[0]} and {cities_to_compare[1]} for comparison.")
                 return f"No data for {cities_to_compare[0]} and {cities_to_compare[1]} with current filters.", None
 
             avg_metric_df = subset.groupby("CITY")[selected_metric_col].mean().reset_index()
             avg_metric_df = avg_metric_df[avg_metric_df['CITY'].isin(cities_to_compare)] # Filter to ensure only queried cities
 
             if len(avg_metric_df) < 2:
+                print(f"DEBUG: Could not find sufficient {selected_metric_col} data for both specified cities for comparison.")
                 return f"Could not find sufficient {selected_metric_col.replace('_', ' ')} data for both specified cities with current filters.", None
 
             px_fig = px.bar(avg_metric_df, x='CITY', y=selected_metric_col, 
@@ -1159,20 +1413,28 @@ def plot_and_answer(query, data_frame, plot_template):
                             color_discrete_map={cities_to_compare[0]: "#00D4FF", cities_to_compare[1]: "#7C4DFF"}, # Custom colors
                             height=default_plot_height
                             )
-            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+            px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_layout(legend_font_color=font_color) # Set legend font color
             st.plotly_chart(px_fig, use_container_width=True)
             plot_generated = True
             return f"Interactive comparison of average {selected_metric_col.replace('_', ' ')} between {cities_to_compare[0]} and {cities_to_compare[1]}.", None
         else:
+            print(f"DEBUG: Did not find two cities for general comparison. Found: {cities_to_compare}")
             return "Please specify exactly two cities to compare.", None
 
     # 7. Speed comparison by management type (Plotly Boxplot)
     elif ("speed" in query_lower and ("ai" in query_lower or "conventional" in query_lower or "management" in query_lower)):
+        print("DEBUG: Triggered: Speed comparison by management type analysis.")
         if 'MANAGEMENT_TYPE' not in data_frame.columns or 'SPEED' not in data_frame.columns:
+            print("DEBUG: Missing MANAGEMENT_TYPE or SPEED columns for speed comparison.")
             return "Required columns (MANAGEMENT_TYPE, SPEED) are missing for this plot.", None
 
         plot_data = data_frame.dropna(subset=['MANAGEMENT_TYPE', 'SPEED'])
+        print(f"DEBUG: Speed by management type - plot_data shape: {plot_data.shape}, unique MANAGEMENT_TYPE: {plot_data['MANAGEMENT_TYPE'].unique()}")
         if plot_data.empty or plot_data['MANAGEMENT_TYPE'].nunique() < 2:
+            print("DEBUG: Not enough unique management types or speed data for speed comparison.")
             return "Not enough unique management types or speed data to create a boxplot with current filters.", None
 
         px_fig = px.box(plot_data, x="MANAGEMENT_TYPE", y="SPEED", 
@@ -1180,16 +1442,58 @@ def plot_and_answer(query, data_frame, plot_template):
                         labels={"MANAGEMENT_TYPE": "Management Type", "SPEED": "Speed"},
                         template=plot_template,
                         color="MANAGEMENT_TYPE", # Color by management type
-                        color_discrete_map={"AI": "#00D4FF", "Conventional": "#7C4DFF"}, # Custom palette
+                        color_discrete_map={"AI- MANAGEMENT SYSTEM": "#00D4FF", "CONVENTIONAL METHOD": "#7C4DFF"}, # Custom palette
                         height=default_plot_height
                         )
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return "Interactive boxplot comparing traffic speed distributions between AI and conventionally managed systems.", None
 
+    # --- NEW: Congestion comparison by management type (Plotly Bar Chart) ---
+    elif ("congestion" in query_lower and ("ai" in query_lower or "conventional" in query_lower or "management" in query_lower)):
+        print("DEBUG: Triggered: Congestion comparison by management type analysis.")
+        if 'MANAGEMENT_TYPE' not in data_frame.columns or 'congestion_index' not in data_frame.columns:
+            print("DEBUG: Missing MANAGEMENT_TYPE or congestion_index columns for congestion comparison.")
+            return "Required columns (MANAGEMENT_TYPE, congestion_index) are missing for this plot.", None
+
+        plot_data = data_frame.dropna(subset=['MANAGEMENT_TYPE', 'congestion_index'])
+        print(f"DEBUG: Congestion by management type - plot_data shape: {plot_data.shape}, unique MANAGEMENT_TYPE: {plot_data['MANAGEMENT_TYPE'].unique()}")
+        if plot_data.empty or plot_data['MANAGEMENT_TYPE'].nunique() < 2:
+            print("DEBUG: Not enough unique management types or congestion data for comparison.")
+            return "Not enough unique management types or congestion data to compare congestion by management type.", None
+        
+        # Calculate average congestion for each management type
+        avg_congestion_by_mgmt = plot_data.groupby('MANAGEMENT_TYPE')['congestion_index'].mean().reset_index()
+
+        px_fig = px.bar(avg_congestion_by_mgmt, x="MANAGEMENT_TYPE", y="congestion_index", 
+                        title="Average Congestion Index: AI vs Conventional Management",
+                        labels={"MANAGEMENT_TYPE": "Management Type", "congestion_index": "Average Congestion Index"},
+                        template=plot_template,
+                        color="MANAGEMENT_TYPE", # Color by management type
+                        color_discrete_map={"AI- MANAGEMENT SYSTEM": "#00D4FF", "CONVENTIONAL METHOD": "#7C4DFF"}, # Custom palette
+                        height=default_plot_height
+                        )
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
+        st.plotly_chart(px_fig, use_container_width=True)
+        plot_generated = True
+
+        response_msg = "Interactive bar chart comparing average congestion index between AI and conventionally managed systems."
+        for index, row in avg_congestion_by_mgmt.iterrows():
+            response_msg += f"\n- Average Congestion Index for **{row['MANAGEMENT_TYPE']}**: {row['congestion_index']:.2f}"
+        return response_msg, None
+    # --- END NEW: Congestion comparison by management type (Plotly Bar Chart) ---
+
+
     # 8. Correlation between two numeric columns (Text output, no plot)
     elif ("correlated" in query_lower or "correlation" in query_lower) and "with" in query_lower:
+        print("DEBUG: Triggered: Correlation between two numeric columns analysis.")
         parts = query_lower.split(" with ")
         if len(parts) == 2:
             col1_raw = parts[0].replace("what is the correlation between", "").strip()
@@ -1214,24 +1518,29 @@ def plot_and_answer(query, data_frame, plot_template):
                         city_found = True
                         subset = data_frame[data_frame["CITY"].str.lower() == city.lower()]
                         if subset.empty:
+                            print(f"DEBUG: No data for {city} for correlation between {col1} and {col2}.")
                             return f"No data for {city} with current filters to calculate correlation between {col1} and {col2}.", None
 
                         subset_clean = subset.dropna(subset=[col1, col2])
                         if len(subset_clean) < 2 or subset_clean[col1].nunique() < 2 or subset_clean[col2].nunique() < 2:
+                            print(f"DEBUG: Not enough varying data for correlation between {col1} and {col2} for {city}.")
                             return f"Not enough varying data to calculate correlation between {col1} and {col2} for {city} with current filters.", None
 
                         correlation = subset_clean[col1].corr(subset_clean[col2])
                         if pd.isna(correlation):
+                            print(f"DEBUG: Could not calculate correlation for {city} (NaN result).")
                             return f"Could not calculate correlation for {city} (likely due to insufficient or non-varying data with current filters).", None
                         return f"The correlation between {col1.replace('_', ' ')} and {col2.replace('_', ' ')} in {city} is **{correlation:.2f}**.", None
 
                 if not city_found:
                     subset_clean = data_frame.dropna(subset=[col1, col2])
                     if len(subset_clean) < 2 or subset_clean[col1].nunique() < 2 or subset_clean[col2].nunique() < 2:
+                        print(f"DEBUG: Not enough varying data for overall correlation between {col1} and {col2}.")
                         return f"Not enough varying data to calculate overall correlation between {col1} and {col2} with current filters.", None
 
                     correlation = subset_clean[col1].corr(subset_clean[col2])
                     if pd.isna(correlation):
+                        print(f"DEBUG: Could not calculate overall correlation (NaN result).")
                         return f"Could not calculate overall correlation (likely due to insufficient or non-varying data with current filters).", None
                     return f"The overall correlation between {col1.replace('_', ' ')} and {col2.replace('_', ' ')} across all filtered data is **{correlation:.2f}**.", None
             else:
@@ -1241,6 +1550,7 @@ def plot_and_answer(query, data_frame, plot_template):
 
     # 9. Temperature impact on congestion (Plotly Bar Chart)
     elif ("temperature" in query_lower and ("effect" in query_lower or "impact" in query_lower) and "congestion" in query_lower):
+        print("DEBUG: Triggered: Temperature impact on congestion analysis.")
         val_col = "tavg"
         target_col = "congestion_index"
         if val_col not in data_frame.columns or target_col not in data_frame.columns:
@@ -1256,6 +1566,7 @@ def plot_and_answer(query, data_frame, plot_template):
                     corrs.append({"CITY": city_name, "Absolute Correlation": abs(corr_val), "Correlation": corr_val})
 
         if not corrs:
+            print("DEBUG: Could not calculate temperature impact correlations.")
             return "Could not calculate temperature impact correlations with current filters; insufficient data.", None
 
         corr_df = pd.DataFrame(corrs).sort_values(by="Absolute Correlation", ascending=False)
@@ -1267,13 +1578,17 @@ def plot_and_answer(query, data_frame, plot_template):
                         color="Absolute Correlation", color_continuous_scale=px.colors.sequential.OrRd, # Changed palette for dark theme
                         height=default_plot_height
                         )
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return f"{corr_df['CITY'].iloc[0]} shows the highest absolute correlation between temperature and congestion. This plot shows the strength of this relationship across cities.", None
 
     # 10. Strongest factor affecting congestion (Plotly Bar Chart)
     elif "strongest factor" in query_lower or ("strongest" in query_lower and "effect" in query_lower):
+        print("DEBUG: Triggered: Strongest factor analysis.")
         target_col = "congestion_index"
         if "on speed" in query_lower:
             target_col = "SPEED"
@@ -1298,6 +1613,7 @@ def plot_and_answer(query, data_frame, plot_template):
                     corr_values[col] = correlation
 
         if not corr_values:
+            print(f"DEBUG: Could not calculate correlations for any factors with {target_col}.")
             return f"Could not calculate correlations for any factors with current filters (likely due to insufficient or non-varying data for {target_col.replace('_', ' ')}).", None
 
         corr_df = pd.DataFrame(list(corr_values.items()), columns=['Factor', 'Correlation'])
@@ -1311,13 +1627,17 @@ def plot_and_answer(query, data_frame, plot_template):
                         color="Correlation", color_continuous_scale=px.colors.sequential.RdPu, # New palette for dark theme
                         height=default_plot_height
                         )
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return f"The factor with the strongest absolute correlation to {target_col.replace('_', ' ')} is **{corr_df['Factor'].iloc[0].replace('_', ' ')}** (Correlation: {corr_df['Correlation'].iloc[0]:.2f}). The plot shows other factors as well.", None
 
     # 11. Correlation Heatmap (Plotly with Dynamic Height)
     elif "heatmap" in query_lower or "correlation matrix" in query_lower:
+        print("DEBUG: Triggered: Correlation Heatmap analysis.")
         numeric_df = data_frame.select_dtypes(include='number')
         if numeric_df.shape[1] < 2:
              return "Not enough numeric data to generate a correlation heatmap with current filters.", None
@@ -1328,6 +1648,7 @@ def plot_and_answer(query, data_frame, plot_template):
 
         corr_matrix = numeric_df_cleaned.corr()
         if corr_matrix.empty:
+            print("DEBUG: Could not compute correlation matrix.")
             return "Could not compute correlation matrix; likely no variance in filtered numeric data.", None
 
         # DYNAMIC SIZING: Calculate height based on number of features (2x original)
@@ -1343,7 +1664,11 @@ def plot_and_answer(query, data_frame, plot_template):
                            height=plot_height # Set dynamic height
                            )
         px_fig.update_xaxes(side="bottom") # Ensure x-axis labels are at the bottom
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
+        px_fig.update_traces(textfont_color=font_color) # Ensure text on heatmap is white
         px_fig.update_traces(textfont_size=16) # Increased font size for values on heatmap
         st.plotly_chart(px_fig, use_container_width=True) # use_container_width will respect the width, and the height is set in layout
         plot_generated = True
@@ -1351,6 +1676,7 @@ def plot_and_answer(query, data_frame, plot_template):
 
     # 12. Multivariable AQI vs Volume by Management/City (Plotly Scatter)
     elif ("volume" in query_lower or "traffic volume" in query_lower) and ("aqi" in query_lower or "congestion" in query_lower) and ("by management" in query_lower or "by city" in query_lower):
+        print("DEBUG: Triggered: Multivariable AQI/Volume by Management/City analysis.")
         x_col, y_col, hue_col = None, None, None
 
         if "aqi" in query_lower: x_col = "AQI_mean"
@@ -1367,7 +1693,9 @@ def plot_and_answer(query, data_frame, plot_template):
             return f"One or more required columns ({x_col}, {y_col}, {hue_col}) are missing for this plot with current filters.", None
 
         plot_data = data_frame.dropna(subset=[x_col, y_col, hue_col])
+        print(f"DEBUG: Multi-variable scatter - plot_data shape: {plot_data.shape}, unique {hue_col}: {plot_data[hue_col].unique()}")
         if plot_data.empty or plot_data[hue_col].nunique() < 2:
+            print(f"DEBUG: Insufficient data or unique '{hue_col}' values for multi-variable scatter plot.")
             return f"Insufficient data or unique '{hue_col.replace('_', ' ')}' values for scatter plot with current filters.", None
 
         px_fig = px.scatter(plot_data, x=x_col, y=y_col, color=hue_col, 
@@ -1377,13 +1705,17 @@ def plot_and_answer(query, data_frame, plot_template):
                             color_discrete_sequence=px.colors.qualitative.Vivid if plot_template == "plotly_dark" else px.colors.qualitative.Safe, # Varied palette
                             height=default_plot_height
                             )
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return f"Interactive scatter plot showing {y_col.replace('_', ' ')} vs. {x_col.replace('_', ' ')}, color-coded by {hue_col.replace('_', ' ')}.", None
 
     # 13. Season-based analysis (Plotly Boxplot)
     elif "season" in query_lower or "seasonal" in query_lower:
+        print("DEBUG: Triggered: Season-based analysis.")
         if 'date' not in data_frame.columns or not pd.api.types.is_datetime64_any_dtype(data_frame['date']):
             return "Date column not found or not in datetime format. Cannot analyze by season.", None
 
@@ -1402,7 +1734,9 @@ def plot_and_answer(query, data_frame, plot_template):
                 return "Congestion index column not found for seasonal analysis.", None
 
             plot_data = temp_df.dropna(subset=['congestion_index', 'season'])
+            print(f"DEBUG: Seasonal congestion - plot_data shape: {plot_data.shape}, unique seasons: {plot_data['season'].unique()}")
             if plot_data.empty:
+                print("DEBUG: No valid data to plot seasonal congestion.")
                 return "No valid data to plot seasonal congestion after filtering NaN values.", None
 
             px_fig = px.box(plot_data, x='season', y='congestion_index', 
@@ -1414,7 +1748,10 @@ def plot_and_answer(query, data_frame, plot_template):
                             color_discrete_sequence=px.colors.qualitative.Pastel, # Changed palette for dark theme
                             height=default_plot_height
                             )
-            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+            px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_layout(legend_font_color=font_color) # Set legend font color
             st.plotly_chart(px_fig, use_container_width=True)
             plot_generated = True
             return "Interactive boxplot showing congestion index distribution by season.", None
@@ -1423,13 +1760,16 @@ def plot_and_answer(query, data_frame, plot_template):
 
     # 14. Holiday vs Non-Holiday analysis (Plotly Boxplot)
     elif "holiday" in query_lower:
+        print("DEBUG: Triggered: Holiday vs Non-Holiday analysis.")
         if 'Holiday_Flag' not in data_frame.columns:
             return "The 'Holiday_Flag' column is not found in the dataset. Please ensure your 'city_data.csv' includes this column with boolean (True/False) values to analyze holiday impact.", None
         if 'congestion_index' not in data_frame.columns:
             return "Congestion index column not found for holiday analysis.", None
 
         plot_data = data_frame.dropna(subset=['congestion_index', 'Holiday_Flag'])
+        print(f"DEBUG: Holiday analysis - plot_data shape: {plot_data.shape}, unique Holiday_Flag: {plot_data['Holiday_Flag'].unique()}")
         if plot_data.empty or plot_data['Holiday_Flag'].nunique() < 2:
+            print("DEBUG: Not enough valid data or unique values in 'Holiday_Flag' for holiday analysis.")
             return "Not enough valid data or unique values in 'Holiday_Flag' to compare holiday vs non-holiday congestion. Ensure there are both holiday and non-holiday entries.", None
 
         px_fig = px.box(plot_data, x='Holiday_Flag', y='congestion_index', 
@@ -1441,12 +1781,16 @@ def plot_and_answer(query, data_frame, plot_template):
                         height=default_plot_height
                         )
         px_fig.update_xaxes(tickvals=[0, 1], ticktext=['Non-Holiday', 'Holiday'])
-        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+        px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+        px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+        px_fig.update_layout(legend_font_color=font_color) # Set legend font color
         st.plotly_chart(px_fig, use_container_width=True)
         plot_generated = True
         return "Interactive boxplot comparing congestion index on holidays versus non-holidays.", None
 
     # Default fallback
+    print("DEBUG: No specific plotting logic matched the query.")
     return "I'm still learning to understand this question. Try asking for trends, comparisons, rankings, correlations, or specific plots like heatmaps. Be more specific about columns.", None
 
 # =============================================================================
@@ -1487,8 +1831,8 @@ if user_query:
     with st.container(border=True):
         st.markdown('<hr class="main-separator" />', unsafe_allow_html=True)
         with st.spinner("Analyzing your query..."):
-            # Pass the selected Plotly template to the plotting function
-            response_text, fig_object = plot_and_answer(user_query, df, plotly_template)
+            # Pass the selected Plotly template and font_color to the plotting function
+            response_text, fig_object = plot_and_answer(user_query, df, plotly_template, plotly_font_color)
 
             st.subheader("Analysis Result")
             st.write(response_text)
@@ -1661,8 +2005,10 @@ with st.container(border=True):
                                          color_discrete_sequence=["#00D4FF"], # Vibrant blue
                                          height=600
                                         )
-                font_color = "white" if plotly_template == "plotly_dark" else "black"
-                px_fig_monthly.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
+                px_fig_monthly.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=plotly_font_color), title_font_color=plotly_font_color) # Set title font color
+                px_fig_monthly.update_xaxes(title_font=dict(color=plotly_font_color), tickfont=dict(color=plotly_font_color))
+                px_fig_monthly.update_yaxes(title_font=dict(color=plotly_font_color), tickfont=dict(color=plotly_font_color))
+                px_fig_monthly.update_layout(legend_font_color=plotly_font_color) # Set legend font color
                 st.plotly_chart(px_fig_monthly, use_container_width=True)
             else:
                 st.info(f"No monthly congestion trend data available for {dashboard_city}.")
@@ -1745,7 +2091,7 @@ with st.container(border=True):
 # -------------------- Separator before “Traffic Policy Impact Analysis” --------------------
 st.markdown('<hr class="main-separator" />', unsafe_allow_html=True)
 
-def analyze_policy_impact(df_traffic, df_policies, days_window=300, plot_template="plotly_dark"):
+def analyze_policy_impact(df_traffic, df_policies, days_window=300, plot_template="plotly_dark", font_color="white"):
     """
     Analyzes and visualizes the impact of traffic policies on congestion.
     Allows selection of cities and specific policies, displaying before/after metrics.
@@ -1795,20 +2141,19 @@ def analyze_policy_impact(df_traffic, df_policies, days_window=300, plot_templat
 
             analysis_data['days_from_policy'] = (analysis_data['date'] - policy_date).dt.days
             
-            font_color = "white" if plot_template == "plotly_dark" else "black"
-
             # Use Plotly for policy impact plot
             px_fig = px.line(analysis_data, x='days_from_policy', y='congestion_index',
                              title=f"Congestion Trend around Policy Implementation in {selected_city}",
                              labels={'days_from_policy': f"Days from Policy Implementation (0 = {policy_date.strftime('%Y-%m-%d')})",
                                      'congestion_index': "Average Congestion Index"},
                              template=plot_template,
-                             color_discrete_sequence=["#00D4FF"], # Vibrant blue line
+                             color_discrete_sequence=["#00D4FF"], # Vibrant blue
                              height=800)
             
             # Add vertical line for policy date
             vline_color = "white" if plot_template == "plotly_dark" else "#333333"
-            px_fig.add_vline(x=0, line_dash="dash", line_color=vline_color, annotation_text="Policy Implementation Date", annotation_position="top right")
+            px_fig.add_vline(x=0, line_dash="dash", line_color=vline_color, annotation_text="Policy Implementation Date", 
+                             annotation_position="top right", annotation_font_color=font_color)
             
             # Add shaded regions for before and after policy
             px_fig.add_shape(type="rect", x0=-days_window, y0=0, x1=0, y1=1, # y1=1 for normalized height
@@ -1820,8 +2165,10 @@ def analyze_policy_impact(df_traffic, df_policies, days_window=300, plot_templat
 
             # Update layout to show annotations and legend for shapes
             px_fig.update_layout(showlegend=True)
-            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font_color=font_color)
-            
+            px_fig.update_layout(paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)', font=dict(color=font_color), title_font_color=font_color) # Set title font color
+            px_fig.update_xaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_yaxes(title_font=dict(color=font_color), tickfont=dict(color=font_color))
+            px_fig.update_layout(legend_font_color=font_color) # Set legend font color
             st.plotly_chart(px_fig, use_container_width=True)
 
 
@@ -1841,4 +2188,4 @@ def analyze_policy_impact(df_traffic, df_policies, days_window=300, plot_templat
                 st.info("Insufficient data to calculate before/after change.")
 
 st.header("Traffic Policy Impact Analysis")
-analyze_policy_impact(df_original, df_policies, plot_template=plotly_template)
+analyze_policy_impact(df_original, df_policies, plot_template=plotly_template, font_color=plotly_font_color)
